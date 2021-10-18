@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HugeKt | Post Editor</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../../css/adminlte.min.css">
+
+  <link rel="stylesheet" href="../../../plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="../../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="../../../plugins/summernote/summernote-bs4.min.css">
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="../../../plugins/codemirror/codemirror.css">
+  <link rel="stylesheet" href="../../../plugins/codemirror/theme/monokai.css">
+  <!-- SimpleMDE -->
+  <link rel="stylesheet" href="../../../plugins/simplemde/simplemde.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+    <%- include('../partials/navbar') %>
+
+    <!-- Main Sidebar Container -->
+    <%- include('../partials/sidebar') %>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Post Editor</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Text Editors</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card card-outline card-info">
+              <div class="card-header">
+                <h3 class="card-title w-100">
+                  <div class="btn-toolbar d-flex" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="input-group flex-grow-1 mr-3">
+                      <input type="text" value="<%= post.title %>" class="form-control form-control-lg" id="titleInput" minlength="10" placeholder="Title">
+
+                    </div>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-success">Publish</button>
+                      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                        <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+                      <div class="dropdown-menu" role="menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body row">
+                <div class="col-md-9">
+                  <textarea id="editor">
+                      <%- post.content %>
+                    </textarea>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Slug</label>
+                    <input class="form-control" style="width: 100%;" placeholder="Post slug">
+                    </input>
+                  </div>
+                  <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-control select2bs4" style="width: 100%;">
+                      <option selected="selected">Uncategorized</option>
+                      <% categories.forEach((cat) => { %>
+                      <option value="<%= cat.id %>"><%= cat.name %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Tags</label>
+                    <select id="tagSelect" class="select2bs4" multiple="multiple" data-placeholder="Select a tag" style="width: 100%;">
+                      <option>Alabama</option>
+                      <option>Alaska</option>
+                      <option>California</option>
+                      <option>Delaware</option>
+                      <option>Tennessee</option>
+                      <option>Texas</option>
+                      <option>Washington</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputFile">File input</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="exampleInputFile">
+                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                      </div>
+                      <div class="input-group-append">
+                        <span class="input-group-text">Upload</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                  </div>
+                </div>
+                <!-- <textarea id="summernote"> -->
+
+              </div>
+              <div class="card-footer">
+                Visit <a href="https://github.com/summernote/summernote/">Summernote</a> documentation for more
+                examples and information about the plugin.
+              </div>
+            </div>
+          </div>
+          <!-- /.col-->
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- jQuery -->
+  <script src="../../../plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="../../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="../../../js/adminlte.min.js"></script>
+  <!-- Summernote -->
+  <script src="../../../plugins/summernote/summernote-bs4.min.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+  <script src="../../../plugins/select2/js/select2.full.min.js"></script>
+  <!-- CodeMirror -->
+  <script src="../../../plugins/codemirror/codemirror.js"></script>
+  <script src="../../../plugins/codemirror/mode/css/css.js"></script>
+  <script src="../../../plugins/codemirror/mode/xml/xml.js"></script>
+  <script src="../../../plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="../../../js/demo.js"></script>
+  <!-- Page specific script -->
+  <!-- <script>
+    $(function () {
+      // Summernote
+      $('#summernote').summernote({ height: 360 })
+
+      // CodeMirror
+      CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+        mode: "htmlmixed",
+        theme: "monokai"
+      });
+    })
+  </script> -->
+  <script>
+    $(function() {
+      //Initialize Select2 Elements
+      $('.select2').select2()
+
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+
+      $('#tagSelect').select2({
+        theme: 'bootstrap4',
+        tags: true,
+        tokenSeparators: [',', ' '],
+        createTag: function(params) {
+          var term = $.trim(params.term);
+
+          if (term === '') {
+            return null;
+          }
+
+          return {
+            id: term,
+            text: term,
+            newTag: true // add additional parameters
+          }
+        }
+      })
+
+      ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+          console.log(editor);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/hugekt-web/src",
+  "compilerOptions": {
+    "assets": [
+      {
+        "include": "**/*.ejs",
+        "watchAssets": true
+      },
+      {
+        "include": "public/**/*",
+        "watchAssets": true
+      }
+    ],
+    "webpack": true,
+    "tsConfigPath": "apps/hugekt-web/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/hugekt-web",
+  "projects": {
+    "hugekt-web": {
+      "type": "application",
+      "root": "apps/hugekt-web",
+      "entryFile": "main",
+      "sourceRoot": "apps/hugekt-web/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/hugekt-web/tsconfig.app.json"
+      }
+    },
+    "hugekt-api": {
+      "type": "application",
+      "root": "apps/hugekt-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/hugekt-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/hugekt-api/tsconfig.app.json"
+      }
+    },
+    "hugekt-core": {
+      "type": "library",
+      "root": "libs/hugekt-core",
+      "entryFile": "index",
+      "sourceRoot": "libs/hugekt-core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/hugekt-core/tsconfig.lib.json"
+      }
+    }
+  }
+}
