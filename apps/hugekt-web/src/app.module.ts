@@ -12,7 +12,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApiModule } from './modules/api/api.module';
 import databaseConfig from '@app/hugekt-core/config/database.config';
-
+import { HugektCoreModule } from '@app/hugekt-core';
 @Module({
     imports: [
         ServeStaticModule.forRoot({
@@ -21,28 +21,7 @@ import databaseConfig from '@app/hugekt-core/config/database.config';
                 maxAge: 31557600000,
             },
         }),
-        ConfigModule.forRoot({
-            envFilePath: ['.env'],
-            load: [databaseConfig],
-        }),
-        TypeOrmModule.forRoot({
-            type: 'mariadb',
-            host: databaseConfig().host,
-            port: databaseConfig().port,
-            username: databaseConfig().username,
-            password: databaseConfig().password,
-            database: databaseConfig().database,
-            entities: databaseConfig().entities,
-            migrations: databaseConfig().migrations,
-            cli: {
-                entitiesDir: databaseConfig().entitiesDir,
-                migrationsDir: databaseConfig().migrationsDir,
-                //subscribersDir: []
-            },
-            synchronize: databaseConfig().synchronize,
-            logging: databaseConfig().logging,
-        }),
-        ConfigModule,
+        HugektCoreModule,
         ProvidersModule,
         HomeModule,
         PostModule,
@@ -50,7 +29,7 @@ import databaseConfig from '@app/hugekt-core/config/database.config';
         SharedModule,
         AdminModule,
         AuthModule,
-        ApiModule,
+        //ApiModule,
     ],
     //controllers: [AppController],
     //providers: [AppService],
