@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { HugektApiController } from './hugekt-api.controller';
-import { HugektApiService } from './hugekt-api.service';
+import { ApiModule } from '../modules/api/api.module';
 
 @Module({
-  imports: [],
-  controllers: [HugektApiController],
-  providers: [HugektApiService],
+    imports: [ApiModule],
 })
 export class HugektApiModule {}

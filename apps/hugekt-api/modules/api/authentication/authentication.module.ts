@@ -4,8 +4,8 @@ import { AuthenticationController } from './authentication.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { UserModule } from '../../user/user.module';
 import { jwtConstants } from '@app/hugekt-web/common/constant';
+import { UserModule } from '@app/hugekt-core/modules/user/user.module';
 
 @Module({
     imports: [

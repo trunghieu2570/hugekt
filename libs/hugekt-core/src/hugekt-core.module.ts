@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import databaseConfig from './config/database.config';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import databaseConfig from './config/database.config';
             logging: databaseConfig().logging,
         }),
         ConfigModule,
+        UserModule,
     ],
 })
 export class HugektCoreModule {}

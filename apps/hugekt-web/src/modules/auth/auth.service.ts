@@ -1,5 +1,5 @@
+import { UserService } from '@app/hugekt-core/modules/user/user.service';
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
