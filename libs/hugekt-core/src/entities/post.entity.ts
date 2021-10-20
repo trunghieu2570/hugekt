@@ -38,7 +38,7 @@ export class Post {
     @Column('text')
     content: string;
 
-    @Column('datetime')
+    @Column('datetime', { nullable: true })
     publishedAt: Date;
 
     @ManyToOne(() => Category, (category) => category.posts)

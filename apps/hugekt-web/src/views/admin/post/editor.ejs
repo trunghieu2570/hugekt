@@ -55,16 +55,16 @@
       <section class="content">
         <div class="row">
           <div class="col-md-12">
-            <div class="card card-outline card-info">
+            <form class="card card-outline card-info" method="post" action="">
               <div class="card-header">
                 <h3 class="card-title w-100">
                   <div class="btn-toolbar d-flex" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="input-group flex-grow-1 mr-3">
-                      <input type="text" value="<%= post.title %>" class="form-control form-control-lg" id="titleInput" minlength="10" placeholder="Title">
+                      <input type="text" name="title" value="<%= post.title %>" class="form-control form-control-lg" id="titleInput" minlength="10" placeholder="Title">
 
                     </div>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-success">Publish</button>
+                      <button type="submit" class="btn btn-success">Publish</button>
                       <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                         <span class="sr-only">Toggle Dropdown</span>
                       </button>
@@ -84,35 +84,31 @@
               <!-- /.card-header -->
               <div class="card-body row">
                 <div class="col-md-9">
-                  <textarea id="editor">
+                  <textarea name="content" id="editor">
                       <%- post.content %>
                     </textarea>
                 </div>
                 <div class="col-md-3">
                   <div class="form-group">
                     <label>Slug</label>
-                    <input class="form-control" style="width: 100%;" placeholder="Post slug">
+                    <input name="slug" disabled value="<%= post.slug %>" class="form-control" style="width: 100%;" placeholder="Auto-generated slug">
                     </input>
                   </div>
                   <div class="form-group">
                     <label>Category</label>
-                    <select class="form-control select2bs4" style="width: 100%;">
-                      <option selected="selected">Uncategorized</option>
+                    <select name="category" class="form-control select2bs4" style="width: 100%;">
+                      <!-- <option value="0" selected="selected">Uncategorized</option> -->
                       <% categories.forEach((cat) => { %>
-                      <option value="<%= cat.id %>"><%= cat.name %></option>
+                      <option value="<%= cat.id %>" <%= post.category?.id === cat.id ? "selected": "" %>><%= cat.name %></option>
                       <% }) %>
                     </select>
                   </div>
                   <div class="form-group">
                     <label>Tags</label>
-                    <select id="tagSelect" class="select2bs4" multiple="multiple" data-placeholder="Select a tag" style="width: 100%;">
-                      <option>Alabama</option>
-                      <option>Alaska</option>
-                      <option>California</option>
-                      <option>Delaware</option>
-                      <option>Tennessee</option>
-                      <option>Texas</option>
-                      <option>Washington</option>
+                    <select name="tags[]" id="tagSelect" class="select2bs4" multiple="multiple" data-placeholder="Select a tag" style="width: 100%;">
+                      <% tags.forEach((tag) => { %>
+                      <option value="<%= tag.slug %>" <%= post.tags?.some(e => e.id === tag.id) ? "selected": "" %>><%= tag.name %></option>
+                      <% }) %>
                     </select>
                   </div>
                   <div class="form-group">
@@ -139,7 +135,7 @@
                 Visit <a href="https://github.com/summernote/summernote/">Summernote</a> documentation for more
                 examples and information about the plugin.
               </div>
-            </div>
+            </form>
           </div>
           <!-- /.col-->
         </div>
@@ -164,7 +160,7 @@
   <script src="../../../js/adminlte.min.js"></script>
   <!-- Summernote -->
   <script src="../../../plugins/summernote/summernote-bs4.min.js"></script>
-  <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+  <script src="../../../plugins/ckeditor5/ckeditor.js"></script>
   <script src="../../../plugins/select2/js/select2.full.min.js"></script>
   <!-- CodeMirror -->
   <script src="../../../plugins/codemirror/codemirror.js"></script>
@@ -198,7 +194,7 @@
       $('#tagSelect').select2({
         theme: 'bootstrap4',
         tags: true,
-        tokenSeparators: [',', ' '],
+        tokenSeparators: [','],
         createTag: function(params) {
           var term = $.trim(params.term);
 
@@ -214,14 +210,85 @@
         }
       })
 
+      //CKEDITOR.replace( 'editor' );
+      //const ImageInsert = require('@ckeditor/ckeditor5-image/src/imageinsert');
+
       ClassicEditor
-        .create(document.querySelector('#editor'))
+        .create(document.querySelector('#editor'), {
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'undo',
+              'redo',
+              'bold',
+              'italic',
+              'underline',
+              'strikethrough',
+              'subscript',
+              'superscript',
+              'link',
+              'horizontalLine',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'alignment',
+              'outdent',
+              'indent',
+              '|',
+              'fontSize',
+              'fontFamily',
+              'fontColor',
+              'fontBackgroundColor',
+              'imageInsert',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              'findAndReplace',
+              'specialCharacters',
+              'code',
+              'htmlEmbed',
+              'sourceEditing'
+            ]
+          },
+          language: 'en',
+          image: {
+            toolbar: [
+              'imageTextAlternative',
+              'imageStyle:inline',
+              'imageStyle:block',
+              'imageStyle:side',
+              'linkImage'
+            ]
+          },
+          table: {
+            contentToolbar: [
+              'tableColumn',
+              'tableRow',
+              'mergeTableCells'
+            ]
+          },
+          licenseKey: '',
+
+
+
+        })
         .then(editor => {
-          console.log(editor);
+          window.editor = editor;
+
         })
         .catch(error => {
+          console.error('Oops, something went wrong!');
+          console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+          console.warn('Build id: w0x239ssm0o6-fpoy8yz90g9q');
           console.error(error);
         });
+
+      // Summernote
+      //   $('#editor').summernote({
+      //     height: 360
+      //   })
     });
   </script>
 </body>
