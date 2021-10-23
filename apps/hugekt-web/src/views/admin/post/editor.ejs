@@ -33,7 +33,7 @@
     <%- include('../partials/sidebar') %>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper d-flex flex-column flex-grow-1">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <div class="container-fluid">
@@ -52,13 +52,13 @@
       </section>
 
       <!-- Main content -->
-      <section class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <form class="card card-outline card-info" method="post" action="">
+      <section class="content d-flex flex-column flex-grow-1">
+        <div class="row flex-grow-1">
+          <div class="col-md-12 d-flex">
+            <form class="card card-outline card-info flex-grow-1" method="post" action="">
               <div class="card-header">
                 <h3 class="card-title w-100">
-                  <div class="btn-toolbar d-flex" role="toolbar" aria-label="Toolbar with button groups">
+                  <div class="btn-toolbar d-flex flex-nowrap" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="input-group flex-grow-1 mr-3">
                       <input type="text" name="title" value="<%= post.title %>" class="form-control form-control-lg" id="titleInput" minlength="10" placeholder="Title">
 
@@ -83,12 +83,12 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body row">
-                <div class="col-md-9">
-                  <textarea name="content" id="editor">
+                <div class="col-md-9 d-flex flex-column">
+                  <textarea name="content" id="editor" class="d-none">
                       <%- post.content %>
                     </textarea>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mt-3 mt-md-0">
                   <div class="form-group">
                     <label>Slug</label>
                     <input name="slug" disabled value="<%= post.slug %>" class="form-control" style="width: 100%;" placeholder="Auto-generated slug">
@@ -131,10 +131,10 @@
                 <!-- <textarea id="summernote"> -->
 
               </div>
-              <div class="card-footer">
+              <!-- <div class="card-footer">
                 Visit <a href="https://github.com/summernote/summernote/">Summernote</a> documentation for more
                 examples and information about the plugin.
-              </div>
+              </div> -->
             </form>
           </div>
           <!-- /.col-->
@@ -182,6 +182,22 @@
       });
     })
   </script> -->
+  <style>
+    .ck-editor {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+    }
+    .ck-editor__main {
+      display: flex;
+      flex-grow: 1;
+    }
+    .ck-editor__editable_inline {
+      min-height: 400px;
+      flex-grow: 1;
+    }
+  </style>
+
   <script>
     $(function() {
       //Initialize Select2 Elements
