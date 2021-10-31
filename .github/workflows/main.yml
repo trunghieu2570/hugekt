@@ -41,5 +41,7 @@ jobs:
 
       - name: Deploy
         run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js production
+        env:
+          HOST: ${{secrets.HOST}}
         # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
         # run: yarn deploy
