@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: 'hugekt-default',
-            script: 'npm run start:prod',
+            script: 'npm run start:hugekt-web',
             time: true,
             instances: 1,
             autorestart: true,
