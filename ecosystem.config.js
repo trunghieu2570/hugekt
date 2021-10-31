@@ -17,7 +17,7 @@ module.exports = {
     deploy: {
         production: {
             user: 'bitnami',
-            host: 'hugekt.com',
+            host: process.env.HOST,
             key: '~/.ssh/default_deploy.key',
             ref: 'origin/master',
             repo: 'https://github.com/trunghieu2570/hugekt',
