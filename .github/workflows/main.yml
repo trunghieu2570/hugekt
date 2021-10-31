@@ -1,41 +1,45 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+name: CI - Master
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: self-hosted
-    
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ./default_deploy.key
+          sudo chmod 600 ./default_deploy.key
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm install pm2 -g
-      - run: npm install yarn -g
-      - run: npm install -g @nestjs/cli
-      - run: npm install
-      - run: npm run build
-      - run: pm2 start npm watch --name "default" -- run start:prod
+      # (optional - only needed if your config uses environment variables)
+      - name: Create env file
+        run: |
+          touch .env
+          echo TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} >> .env
+          echo TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} >> .env
+          echo TYPEORM_ENTITIES=${{ secrets.TYPEORM_ENTITIES }} >> .env
+          echo TYPEORM_ENTITIES_DIR=${{ secrets.TYPEORM_ENTITIES_DIR }} >> .env
+          echo TYPEORM_HOST=${{ secrets.TYPEORM_HOST }} >> .env
+          echo TYPEORM_LOGGING=${{ secrets.TYPEORM_LOGGING }} >> .env
+          echo TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} >> .env
+          echo TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} >> .env
+          echo TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} >> .env
+          echo TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} >> .env
+          echo TYPEORM_SYNCHRONIZE=${{ secrets.TYPEORM_SYNCHRONIZE }} >> .env
+          echo TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} >> .env
+
+      - name: Install PM2
+        run: npm i pm2
+
+      - name: Deploy
+        run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging
+        # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
+        # run: yarn deploy
