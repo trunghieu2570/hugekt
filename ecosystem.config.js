@@ -21,7 +21,7 @@ module.exports = {
             key: 'default_deploy.key',
             ref: 'origin/master',
             repo: 'https://github.com/trunghieu2570/hugekt.git',
-            path: '/home/bitnami/hugekt-default',
+            path: '/home/ubuntu/hugekt-default',
             'post-deploy':
                 'source $NVM_DIR/nvm.sh && npm i -g ts-node typescript @nestjs/cli && npm i && npm run migration:run && npm run build && pm2 reload ecosystem.config.js --env production && pm2 save && git checkout yarn.lock',
             env: {
