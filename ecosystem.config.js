@@ -20,7 +20,7 @@ module.exports = {
             host: process.env.HOST,
             key: 'default_deploy.key',
             ref: 'origin/master',
-            repo: 'https://github.com/trunghieu2570/hugekt',
+            repo: 'https://github.com/trunghieu2570/hugekt.git',
             path: '/home/bitnami/hugekt-default',
             'post-deploy':
                 'npm i && npm run build && pm2 reload ecosystem.config.js --env production && pm2 save && git checkout yarn.lock',
