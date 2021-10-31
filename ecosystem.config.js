@@ -16,7 +16,7 @@ module.exports = {
     ],
     deploy: {
         production: {
-            user: 'bitnami',
+            user: 'ubuntu',
             host: process.env.HOST,
             key: 'default_deploy.key',
             ref: 'origin/master',
