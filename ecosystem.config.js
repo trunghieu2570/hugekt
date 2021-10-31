@@ -23,7 +23,7 @@ module.exports = {
             repo: 'https://github.com/trunghieu2570/hugekt.git',
             path: '/home/bitnami/hugekt-default',
             'post-deploy':
-                'source ~/.bashrc && npm i -g @nestjs/cli && npm i && npm run build && pm2 reload ecosystem.config.js --env production && pm2 save && git checkout yarn.lock',
+                '~/.nvm/nvm.sh && npm i -g @nestjs/cli && npm i && npm run build && pm2 reload ecosystem.config.js --env production && pm2 save && git checkout yarn.lock',
             env: {
                 NODE_ENV: 'production',
             },
