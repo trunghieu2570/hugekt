@@ -14,6 +14,8 @@ export class PostService {
     }
 
     public findOne(id: number): Promise<Post> {
-        return this.postRepository.findOne(id);
+        return this.postRepository.findOne(id, {
+            relations: ['author'],
+        });
     }
 }

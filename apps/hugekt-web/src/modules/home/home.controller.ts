@@ -1,13 +1,5 @@
 import { AuthExceptionFilter } from '@app/hugekt-web/common/filters/auth-exceptions.filter';
-import { AuthenticatedGuard } from '@app/hugekt-web/common/guards/authenticated.guard';
-import {
-    Controller,
-    Get,
-    Render,
-    Req,
-    UseFilters,
-    UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Render, Req, UseFilters } from '@nestjs/common';
 import { Request } from 'express';
 import { HomeService } from './home.service';
 
@@ -16,15 +8,16 @@ import { HomeService } from './home.service';
 export class HomeController {
     constructor(private homeService: HomeService) {}
 
-    @UseGuards(AuthenticatedGuard)
+    //@UseGuards(AuthenticatedGuard)
     @Get()
     @Render('home')
     public async index(@Req() req: Request): Promise<any> {
         const posts = await this.homeService.getFeaturedPost();
-        console.log(req.user);
+        //console.log(req.user);
         return {
-            site: {
-                name: 'Hello worlds',
+            home: {
+                title: 'Xin chào!!',
+                subtitle: 'Chúc bạn có một ngày tốt lành.',
             },
             posts: posts,
         };

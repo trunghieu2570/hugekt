@@ -4,6 +4,7 @@ import { join } from 'path';
 import { AppModule } from './app.module';
 import * as passport from 'passport';
 import * as session from 'express-session';
+import { Logger } from './common/logger';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -11,6 +12,8 @@ async function bootstrap() {
     app.setViewEngine('ejs');
     app.useStaticAssets(join(__dirname, 'public'));
     app.setBaseViewsDir(join(__dirname, 'views'));
+
+    app.useLogger(app.get(Logger));
 
     app.use(
         session({

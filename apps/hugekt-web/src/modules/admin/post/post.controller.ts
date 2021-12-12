@@ -17,7 +17,6 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import PostService from './post.service';
-import { DateTime } from 'luxon';
 import { PaginationTypeEnum } from 'nestjs-typeorm-paginate';
 import { AuthExceptionFilter } from '@app/hugekt-web/common/filters/auth-exceptions.filter';
 import { UserIdentityInterceptor } from '@app/hugekt-web/common/interceptors/user-identity.interceptor';
@@ -46,7 +45,7 @@ export class PostController {
             route: request.path,
             paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
         });
-        return { posts, DateTime };
+        return { posts };
     }
 
     @UseGuards(AuthenticatedGuard)
