@@ -59,16 +59,35 @@ export class PostController {
     }
 
     @UseGuards(AuthenticatedGuard)
-    @Get(':id')
+    @Post('create')
     @Render('admin/post/editor')
-    public async getPost(@Param('id') id: number): Promise<any> {
-        const post = await this.postService.findOne(id);
+    public async createPost(
+        @Body() body: PostDto,
+        @Req() req: Request,
+        @Res() res: Response,
+    ): Promise<any> {
+        const created = await this.postService.createPost(
+            body,
+            req.user as User,
+        );
+        return res.redirect(`/admin/post/${created.id}`);
+    }
 
-        if (!post) throw new NotFoundException();
-
-        const categories = await this.postService.getAllCategories();
-        const tags = await this.postService.getAllTags();
-        return { post, categories, tags };
+    @UseGuards(AuthenticatedGuard)
+    @Get('categories')
+    @Render('admin/post/categories')
+    public async categories(
+        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+        @Req() request: Request,
+    ): Promise<any> {
+        request.path;
+        const categories = await this.postService.findAllCategories({
+            page,
+            limit: 10,
+            route: request.path,
+            paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
+        });
+        return { categories };
     }
 
     @UseGuards(AuthenticatedGuard)
@@ -86,21 +105,6 @@ export class PostController {
     }
 
     @UseGuards(AuthenticatedGuard)
-    @Post('create')
-    @Render('admin/post/editor')
-    public async createPost(
-        @Body() body: PostDto,
-        @Req() req: Request,
-        @Res() res: Response,
-    ): Promise<any> {
-        const created = await this.postService.createPost(
-            body,
-            req.user as User,
-        );
-        return res.redirect(`/admin/post/${created.id}`);
-    }
-
-    @UseGuards(AuthenticatedGuard)
     @Post(':id')
     @Render('admin/post/editor')
     public async updatePost(
@@ -110,6 +114,19 @@ export class PostController {
     ): Promise<any> {
         await this.postService.updatePost(id, body, req.user as User);
         const post = await this.postService.findOne(id);
+        const categories = await this.postService.getAllCategories();
+        const tags = await this.postService.getAllTags();
+        return { post, categories, tags };
+    }
+
+    @UseGuards(AuthenticatedGuard)
+    @Get(':id')
+    @Render('admin/post/editor')
+    public async getPost(@Param('id') id: number): Promise<any> {
+        const post = await this.postService.findOne(id);
+
+        if (!post) throw new NotFoundException();
+
         const categories = await this.postService.getAllCategories();
         const tags = await this.postService.getAllTags();
         return { post, categories, tags };

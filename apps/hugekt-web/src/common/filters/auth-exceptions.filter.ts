@@ -8,20 +8,12 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-@Catch(HttpException)
+@Catch(UnauthorizedException, ForbiddenException)
 export class AuthExceptionFilter implements ExceptionFilter {
     catch(exception: HttpException, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
-
-        if (
-            exception instanceof UnauthorizedException ||
-            exception instanceof ForbiddenException
-        ) {
-            response.redirect(`/auth/login?url=${request.url}`);
-        } else {
-            response.redirect('/error');
-        }
+        response.redirect(`/auth/login?url=${request.url}`);
     }
 }

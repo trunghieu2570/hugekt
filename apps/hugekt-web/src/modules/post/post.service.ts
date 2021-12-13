@@ -18,4 +18,13 @@ export class PostService {
             relations: ['author'],
         });
     }
+
+    public findOneBySlug(slug: string): Promise<Post> {
+        return this.postRepository
+            .createQueryBuilder('post')
+            .where('slug = :slug', { slug })
+            .leftJoinAndSelect('post.author', 'user')
+            .select(['post', 'user'])
+            .getOne();
+    }
 }

@@ -23,11 +23,13 @@ export class ServeStaticExceptionFilter implements ExceptionFilter {
 
         if (exception.code === 'ENOENT') {
             //response.status(404).send('Không tìm thấy trang này');
-            response.sendStatus(HttpStatus.NOT_FOUND);
             this.logger.error(
                 `Server static content {${request.url}} was not found`,
+                exception,
                 'ServeStaticExceptionFilter',
             );
+            console.log(exception);
+            response.sendStatus(HttpStatus.NOT_FOUND);
         } else {
             this.logger.error(
                 `Exception was thrown on request: {${request.url}}`,

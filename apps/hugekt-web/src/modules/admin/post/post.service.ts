@@ -2,6 +2,10 @@ import { Category } from '@app/hugekt-core/entities/category.entity';
 import { Post } from '@app/hugekt-core/entities/post.entity';
 import { Tag } from '@app/hugekt-core/entities/tag.entity';
 import { User } from '@app/hugekt-core/entities/user.entity';
+import {
+    generateSlug,
+    incrementalSlugGenerate,
+} from '@app/hugekt-web/common/helpers/slug-generator';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -9,12 +13,9 @@ import {
     paginate,
     Pagination,
 } from 'nestjs-typeorm-paginate';
-import slugify from 'slugify';
 import { Repository } from 'typeorm';
+import { CategoryDto } from './dto/cat.dto';
 import { PostDto } from './dto/post.dto';
-
-const generateSlug = (str: string): string =>
-    slugify(str, { lower: true, trim: true });
 
 @Injectable()
 export default class PostService {
@@ -57,7 +58,13 @@ export default class PostService {
         author: User,
     ): Promise<Post> {
         const toUpdate = await this.postRepository.findOne(id);
-        dto.slug = generateSlug(dto.title);
+
+        if (dto.title != toUpdate.title)
+            dto.slug = await incrementalSlugGenerate(
+                dto.title,
+                this.postRepository,
+            );
+
         const updated = PostDto.mergeWithPost(toUpdate, dto);
         updated.tags = await this.findOrCreateTags(dto.tags);
         updated.author = author;
@@ -66,7 +73,10 @@ export default class PostService {
     }
 
     public async createPost(dto: PostDto, author: User): Promise<Post> {
-        dto.slug = generateSlug(dto.title);
+        dto.slug = await incrementalSlugGenerate(
+            dto.title,
+            this.postRepository,
+        );
         const updated = PostDto.mergeWithPost(new Post(), dto);
         updated.tags = await this.findOrCreateTags(dto.tags);
         updated.author = author;
@@ -117,5 +127,19 @@ export default class PostService {
 
     public getAllTags(): Promise<Tag[]> {
         return this.tagRepository.find();
+    }
+
+    public findAllCategories(
+        options: IPaginationOptions,
+    ): Promise<Pagination<Category>> {
+        return paginate<Category>(this.categoryRepository, options);
+    }
+
+    public async createCategory(dto: CategoryDto): Promise<Category> {
+        const cat = new Category();
+        cat.name = dto.name;
+        cat.slug = generateSlug(dto.name);
+
+        return this.categoryRepository.save(cat);
     }
 }
